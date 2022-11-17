@@ -1,6 +1,9 @@
 package UI;
 
 import javax.swing.*;
+
+import ChatHandler.ChatClient;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -19,6 +22,9 @@ public class ClientUI
     private JTextArea t_message;
     private JButton btnSet;
     private JButton btnSend;
+
+    // A Client handler
+    private ChatClient newClientSocket;
 
     public ClientUI() {
         // Title
@@ -105,9 +111,51 @@ public class ClientUI
         setVisible(true);
     }
 
+    public void uiReceive()
+    {
+        Thread th_recieve = new Thread(new Runnable()
+        {
+            String msg;
+            @Override
+            public void run()
+            {
+                while(msg != "Client Disconnect")
+                {
+                    msg = newClientSocket.receive();
+                    t_message.setText(t_message.getText() + "\n" + msg);
+                }
+            }
+        });
+            
+        th_recieve.start();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
+        if (e.getSource() == btnSet) {
+            // get port and ip on the UI and create a sever socket
+            int severPort = Integer.parseInt(i_port.getText());
+            String ipAddress = i_ipaddress.getText();
+            newClientSocket = new ChatClient();
 
+            // Waiting for client to connect
+            t_message.setText("Connecting to" +ipAddress + "\n At port: " + severPort);
+            // Connect to sever
+            newClientSocket.Set(ipAddress, severPort);
+
+            t_message.setText(t_message.getText() + "\nYou and Server now can talk to each other " + severPort);
+
+            uiReceive();
+
+        }
+
+        if (e.getSource() == btnSend) {
+            String msg = i_message.getText();
+            newClientSocket.Send(msg);
+
+            // Show your msg
+            t_message.setText(t_message.getText() + "\n Client: " + msg);
+            i_message.setText("");
+        }
     }
 }

@@ -1,5 +1,9 @@
 package UI;
+
 import javax.swing.*;
+
+import ChatHandler.ChatSever;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -10,15 +14,18 @@ public class SeverUI
     // Variable
     private Container c;
     private JLabel l_title;
-    //private JLabel l_ipAddress;
+    // private JLabel l_ipAddress;
     private JLabel l_port;
     private JLabel l_mes;
-    //private JTextField i_ipaddress;
+    // private JTextField i_ipaddress;
     private JTextField i_port;
     private JTextField i_message;
     private JTextArea t_message;
-    private JButton btnSet;
+    private JButton btnLis;
     private JButton btnSend;
+
+    // A sever handler
+    private ChatSever newSeverSocket;
 
     public SeverUI() {
         // Title
@@ -87,12 +94,12 @@ public class SeverUI
         i_message.setLocation(150, 475);
         c.add(i_message);
 
-        btnSet = new JButton("LIS");
-        btnSet.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnSet.setSize(80, 40);
-        btnSet.setLocation(400, 90);
-        btnSet.addActionListener(this);
-        c.add(btnSet);
+        btnLis = new JButton("LIS");
+        btnLis.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnLis.setSize(80, 40);
+        btnLis.setLocation(400, 90);
+        btnLis.addActionListener(this);
+        c.add(btnLis);
 
         btnSend = new JButton("S");
         btnSend.setFont(new Font("Arial", Font.BOLD, 20));
@@ -105,9 +112,48 @@ public class SeverUI
         setVisible(true);
     }
 
+    public void uiReceive()
+    {
+        Thread th_recieve = new Thread(new Runnable()
+        {
+            String msg;
+            @Override
+            public void run()
+            {
+                while(msg != "Client Disconnect")
+                {
+                    msg = newSeverSocket.receive();
+                    t_message.setText(t_message.getText() + "\n" + msg);
+                }
+            }
+        });
+            
+        th_recieve.start();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
+        if (e.getSource() == btnLis) {
+            // get port on the UI and create a sever socket
+            int severPort = Integer.parseInt(i_port.getText());
+            newSeverSocket = new ChatSever(severPort);
+
+            // Waiting for client to connect
+            t_message.setText("Sever is listening on port: " + severPort);
+            newSeverSocket.listen(severPort);
+            t_message.setText(t_message.getText() + "\nYou and client now can talk to each other " + severPort);
+
+            uiReceive();
+        }
+
+        if (e.getSource() == btnSend) {
+            String msg = i_message.getText();
+            newSeverSocket.Send(msg);
+
+            // Show your msg
+            t_message.setText(t_message.getText() + "\n Sever: " + msg);
+            i_message.setText("");
+        }
 
     }
 }
