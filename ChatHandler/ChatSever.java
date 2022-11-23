@@ -19,16 +19,18 @@ public class ChatSever {
 
     public void listen(int port) {
         try {
+            // Create server socket
             serverSocket = new ServerSocket(port);
             System.out.println("Chat Server is listening on port " + port);
+            
             // Waiting for client
             clientSocket = serverSocket.accept(); // this is client
             System.out.println("Connected\n");
             System.out.println("Now you can chat each other!\n");
 
-            // Get output of client through client socket
+            // Get input of client through client socket
+            // Send msg to client through output            
             out = new PrintWriter(clientSocket.getOutputStream());
-            //
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
             // 2 thread 1 loop on waiting, other stop exc at System.in
@@ -68,23 +70,10 @@ public class ChatSever {
 
     public void Send(String uiMsg) {
 
-        // Thread sender = new Thread(new Runnable() {
         String msg; // will contain data by Sever
-        // @Override //override method
-        // public void run()
-        // {
-        // while(true)
-        // {
-        // set message from key board tp msg
-        msg = uiMsg; // nextLine will pause exc
+        msg = uiMsg;
         out.println(msg);
         out.flush();
-        // }
-
-        // }
-        // });
-
-        // sender.start();
     }
 
 }
