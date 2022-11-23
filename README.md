@@ -1,6 +1,6 @@
 # Chat-application-using-java-sockets
+This is a really basic Sever-Client socket for beginer to preview how socket work in java 
 This is not use muti thread for mutiple-user!
-Using Sever-Client connection
 # How to use
 compile file cClient.java and cServer.java .\
  `javac cClient.java`.\
