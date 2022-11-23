@@ -2,10 +2,9 @@ package ChatHandler;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
 public class ChatClient {
-    private Socket clientSocket;
+    private Socket serverSocket;
     private BufferedReader in;
     private PrintWriter out;
 
@@ -21,7 +20,6 @@ public class ChatClient {
             System.out.println("Connected");
 
         } catch (IOException e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
     }
@@ -37,7 +35,7 @@ public class ChatClient {
         String msg;
         try {
             msg = in.readLine(); // read data from the client socket
-            // While client still connect to the sever
+
             if(msg != null) {
                 System.out.println("Server: " + msg);
                 return "Server: " + msg;
@@ -46,12 +44,11 @@ public class ChatClient {
             // if msg null mean client disconnect
             // close socket and stream
             out.close();
-            clientSocket.close();
+            serverSocket.close();
             System.out.println("Client Disconnect");
             
             
         } catch (IOException e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
         return "Disconnect from sever";

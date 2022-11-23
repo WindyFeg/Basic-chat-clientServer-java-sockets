@@ -45,20 +45,6 @@ public class SeverUI
         l_title.setLocation(200, 30);
         c.add(l_title);
 
-        // Ip address label
-        // l_ipAddress = new JLabel("IP: ");
-        // l_ipAddress.setFont(new Font("Arial", Font.PLAIN, 20));
-        // l_ipAddress.setSize(100, 20);
-        // l_ipAddress.setLocation(50, 100);
-        // c.add(l_ipAddress);
-
-        // Ip address input
-        // i_ipaddress = new JTextField();
-        // i_ipaddress.setFont(new Font("Arial", Font.PLAIN, 12));
-        // i_ipaddress.setSize(150, 20);
-        // i_ipaddress.setLocation(100, 100);
-        // c.add(i_ipaddress);
-
         l_port = new JLabel("Port: ");
         l_port.setFont(new Font("Arial", Font.PLAIN, 20));
         l_port.setSize(100, 20);

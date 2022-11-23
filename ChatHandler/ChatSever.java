@@ -2,7 +2,6 @@ package ChatHandler;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
 public class ChatSever {
     private int port;
@@ -10,8 +9,6 @@ public class ChatSever {
     private Socket clientSocket;
     private BufferedReader in;
     private PrintWriter out;
-    // Read input from key board
-    private Scanner sc = new Scanner(System.in);
 
     public ChatSever(int port) {
         this.port = port;
@@ -22,19 +19,17 @@ public class ChatSever {
             // Create server socket
             serverSocket = new ServerSocket(port);
             System.out.println("Chat Server is listening on port " + port);
-            
+
             // Waiting for client
             clientSocket = serverSocket.accept(); // this is client
             System.out.println("Connected\n");
             System.out.println("Now you can chat each other!\n");
 
             // Get input of client through client socket
-            // Send msg to client through output            
+            // Send msg to client through output
             out = new PrintWriter(clientSocket.getOutputStream());
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            // 2 thread 1 loop on waiting, other stop exc at System.in
-            // receive();
         } catch (IOException ex) {
             System.out.println("Error in the server: " + ex.getMessage());
             // Print prints several lines in the output console
@@ -47,7 +42,7 @@ public class ChatSever {
         try {
             msg = in.readLine(); // read data from the client socket
             // While client still connect to the sever
-            if(msg != null) {
+            if (msg != null) {
                 System.out.println("Client: " + msg);
                 return "Client: " + msg;
             }
@@ -58,10 +53,8 @@ public class ChatSever {
             clientSocket.close();
             serverSocket.close();
             System.out.println("Client Disconnect");
-            
-            
+
         } catch (IOException e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
         return "Client Disconnect";
